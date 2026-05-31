@@ -127,6 +127,15 @@ function openProjet(index) {
       ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
       : null;
 
+  // Avis client (défini avant utilisation)
+  const etoiles = parseInt(p.etoiles) || 0;
+  const starsHtml = etoiles > 0 ? `
+    <div class="avis-block">
+      <div class="avis-etoiles">${'★'.repeat(etoiles)}${'☆'.repeat(5 - etoiles)}</div>
+      ${p.avis ? `<blockquote class="avis-texte">"${p.avis}"</blockquote>` : ''}
+    </div>
+  ` : '';
+
   // Image hero
   document.getElementById('projet-hero').innerHTML = imgSrc
     ? `<img src="${imgSrc}" alt="${p.titre}" class="projet-img">`
@@ -143,14 +152,6 @@ function openProjet(index) {
 
   // Contenu détaillé
   const details = p.details || p.description || '';
-  const etoiles = parseInt(p.etoiles) || 0;
-  const starsHtml = etoiles > 0 ? `
-    <div class="avis-block">
-      <div class="avis-etoiles">${'★'.repeat(etoiles)}${'☆'.repeat(5 - etoiles)}</div>
-      ${p.avis ? `<blockquote class="avis-texte">"${p.avis}"</blockquote>` : ''}
-    </div>
-  ` : '';
-
   document.getElementById('projet-contenu').innerHTML =
     details ? details.split('|').map(para => `<p>${para.trim()}</p>`).join('') : '<p style="color:#888">Aucune description détaillée pour ce projet.</p>';
 
