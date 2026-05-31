@@ -132,12 +132,13 @@ function openProjet(index) {
     ? `<img src="${imgSrc}" alt="${p.titre}" class="projet-img">`
     : `<div class="projet-img-placeholder"></div>`;
 
-  // Méta (badge, titre, client, lien)
+  // Méta (badge, titre, client, lien, avis)
   document.getElementById('projet-meta').innerHTML = `
     <span class="portfolio-badge">${p.categorie || 'Projet'}</span>
     <h1 class="projet-titre">${p.titre}</h1>
     <p class="projet-client">Client : <strong>${p.client}</strong></p>
     ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="btn-primary" style="margin-top:1.25rem;display:inline-block">Visiter le site →</a>` : ''}
+    ${starsHtml}
   `;
 
   // Contenu détaillé
@@ -151,8 +152,7 @@ function openProjet(index) {
   ` : '';
 
   document.getElementById('projet-contenu').innerHTML =
-    (details ? details.split('|').map(para => `<p>${para.trim()}</p>`).join('') : '<p style="color:#888">Aucune description détaillée pour ce projet.</p>')
-    + starsHtml;
+    details ? details.split('|').map(para => `<p>${para.trim()}</p>`).join('') : '<p style="color:#888">Aucune description détaillée pour ce projet.</p>';
 
   showPage('projet');
 }
