@@ -70,10 +70,17 @@ async function loadPortfolio() {
     const grid = document.getElementById('portfolio-grid');
     const coming = document.getElementById('portfolio-coming');
 
-    grid.innerHTML = projects.map(p => `
+    grid.innerHTML = projects.map(p => {
+      if (p.url && !p.url.startsWith('http')) p.url = 'https://' + p.url;
+      const imgSrc = p.image_url
+        ? p.image_url
+        : p.url
+          ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
+          : null;
+      return `
       <div class="portfolio-card">
-        ${p.image_url
-          ? `<img class="portfolio-img" src="${p.image_url}" alt="${p.titre}" onerror="this.style.display='none'">`
+        ${imgSrc
+          ? `<img class="portfolio-img" src="${imgSrc}" alt="${p.titre}" onerror="this.style.display='none'">`
           : `<div class="portfolio-img-placeholder"></div>`}
         <div class="portfolio-body">
           <span class="portfolio-badge">${p.categorie || 'Projet'}</span>
@@ -83,7 +90,7 @@ async function loadPortfolio() {
           ${p.url ? `<a class="portfolio-link" href="${p.url}" target="_blank" rel="noopener">Voir le site →</a>` : ''}
         </div>
       </div>
-    `).join('');
+    `; }).join('');
 
     grid.style.display = 'grid';
     coming.style.display = 'none';
