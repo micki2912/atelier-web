@@ -70,11 +70,11 @@
         <text x="8" y="50" font-family="Georgia, serif" font-size="11" fill="#1A3F6F" letter-spacing="0.3">Atelier Web du Lac</text>
       </svg>
     </a>
-    <ul class="nav-links">
-      <li><a href="#" onclick="showPage('accueil')">Accueil</a></li>
-      <li><a href="#" onclick="showPage('services')">Services</a></li>
-      <li><a href="#" onclick="showPage('portfolio')">Portfolio</a></li>
-      <li><a href="#" onclick="showPage('contact')" class="nav-cta">Parlons de votre projet</a></li>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#" onclick="showPage('accueil');closeMenu()">Accueil</a></li>
+      <li><a href="#" onclick="showPage('services');closeMenu()">Services</a></li>
+      <li><a href="#" onclick="showPage('portfolio');closeMenu()">Portfolio</a></li>
+      <li><a href="#" onclick="showPage('contact');closeMenu()" class="nav-cta">Parlons de votre projet</a></li>
       <li>
         <a href="https://www.instagram.com/atelierweblac/" target="_blank" rel="noopener" class="nav-instagram" aria-label="Instagram">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -85,6 +85,11 @@
         </a>
       </li>
     </ul>
+
+    <!-- Hamburger -->
+    <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ══════════════════════════════════
@@ -179,6 +184,34 @@
       <div class="section-cta">
         <a href="#" class="btn-primary" onclick="showPage('services')">Voir tous les tarifs</a>
       </div>
+    </section>
+
+    <!-- ── ZONE DE SERVICE (SEO local) ── -->
+    <section class="section-zone" aria-label="Zone de service">
+      <p class="section-label">Zone d'intervention</p>
+      <h2 class="section-title">Je travaille avec vous,<br>où que vous soyez dans la région</h2>
+      <p class="section-sub">Basé à Sugiez, au cœur du Mont-Vully, j'accompagne les entreprises locales dans un rayon de 20 km : de Morat à Avenches, de Murten à Payerne, en passant par Estavayer-le-Lac et Fribourg.</p>
+
+      <div class="zone-grid">
+        <div class="zone-card">
+          <div class="zone-titre">Vully & Lac de Morat</div>
+          <p>Sugiez · Môtier · Lugnorre · Praz · Montmagny · Murten / Morat</p>
+        </div>
+        <div class="zone-card">
+          <div class="zone-titre">Broye fribourgeoise</div>
+          <p>Estavayer-le-Lac · Domdidier · Dompierre · Cugy</p>
+        </div>
+        <div class="zone-card">
+          <div class="zone-titre">Région de la Sarine</div>
+          <p>Fribourg · Villars-sur-Glâne · Givisiez · Granges-Paccot</p>
+        </div>
+        <div class="zone-card">
+          <div class="zone-titre">Broye vaudoise</div>
+          <p>Avenches · Payerne · Cudrefin</p>
+        </div>
+      </div>
+
+      <p class="zone-note">Vous êtes en dehors de cette zone ? Je travaille aussi à distance dans toute la Suisse romande — <a href="#" onclick="showPage('contact')">contactez-moi</a>.</p>
     </section>
 
   </div>
@@ -385,6 +418,22 @@
           </div>
           <button type="submit" class="form-submit">Envoyer ma demande</button>
         </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PAGE PROJET (détail)
+  ══════════════════════════════════ -->
+  <div class="page" id="page-projet">
+    <section class="section-top projet-section">
+      <button class="btn-retour" onclick="showPage('portfolio')">← Retour au portfolio</button>
+
+      <div class="projet-hero" id="projet-hero"></div>
+
+      <div class="projet-body">
+        <div class="projet-meta" id="projet-meta"></div>
+        <div class="projet-contenu" id="projet-contenu"></div>
       </div>
     </section>
   </div>

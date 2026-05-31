@@ -15,6 +15,18 @@ function showPage(id) {
   }
 }
 
+/* ── MENU HAMBURGER ── */
+function toggleMenu() {
+  const links = document.getElementById('nav-links');
+  const btn   = document.getElementById('nav-hamburger');
+  links.classList.toggle('open');
+  btn.classList.toggle('active');
+}
+function closeMenu() {
+  document.getElementById('nav-links').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('active');
+}
+
 /**
  * Gestion de l'envoi du formulaire de contact
  * Pour connecter à un vrai service d'envoi, remplacez le contenu
@@ -70,7 +82,10 @@ async function loadPortfolio() {
     const grid = document.getElementById('portfolio-grid');
     const coming = document.getElementById('portfolio-coming');
 
-    grid.innerHTML = projects.map(p => {
+    // Stocke les projets pour la page détail
+    window._portfolioProjects = projects;
+
+    grid.innerHTML = projects.map((p, i) => {
       if (p.url && !p.url.startsWith('http')) p.url = 'https://' + p.url;
       const imgSrc = p.image_url
         ? p.image_url
@@ -78,7 +93,7 @@ async function loadPortfolio() {
           ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
           : null;
       return `
-      <div class="portfolio-card">
+      <div class="portfolio-card" onclick="openProjet(${i})" style="cursor:pointer">
         ${imgSrc
           ? `<img class="portfolio-img" src="${imgSrc}" alt="${p.titre}" onerror="this.style.display='none'">`
           : `<div class="portfolio-img-placeholder"></div>`}
@@ -87,7 +102,7 @@ async function loadPortfolio() {
           <h3 class="portfolio-card-title">${p.titre}</h3>
           <p class="portfolio-client">${p.client}</p>
           ${p.description ? `<p class="portfolio-desc">${p.description}</p>` : ''}
-          ${p.url ? `<a class="portfolio-link" href="${p.url}" target="_blank" rel="noopener">Voir le site →</a>` : ''}
+          <span class="portfolio-link">Voir le détail →</span>
         </div>
       </div>
     `; }).join('');
@@ -100,3 +115,44 @@ async function loadPortfolio() {
 }
 
 loadPortfolio();
+
+/* ── PAGE DÉTAIL PROJET ── */
+function openProjet(index) {
+  const p = window._portfolioProjects[index];
+  if (!p) return;
+
+  const imgSrc = p.image_url
+    ? p.image_url
+    : p.url
+      ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
+      : null;
+
+  // Image hero
+  document.getElementById('projet-hero').innerHTML = imgSrc
+    ? `<img src="${imgSrc}" alt="${p.titre}" class="projet-img">`
+    : `<div class="projet-img-placeholder"></div>`;
+
+  // Méta (badge, titre, client, lien)
+  document.getElementById('projet-meta').innerHTML = `
+    <span class="portfolio-badge">${p.categorie || 'Projet'}</span>
+    <h1 class="projet-titre">${p.titre}</h1>
+    <p class="projet-client">Client : <strong>${p.client}</strong></p>
+    ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="btn-primary" style="margin-top:1.25rem;display:inline-block">Visiter le site →</a>` : ''}
+  `;
+
+  // Contenu détaillé
+  const details = p.details || p.description || '';
+  const etoiles = parseInt(p.etoiles) || 0;
+  const starsHtml = etoiles > 0 ? `
+    <div class="avis-block">
+      <div class="avis-etoiles">${'★'.repeat(etoiles)}${'☆'.repeat(5 - etoiles)}</div>
+      ${p.avis ? `<blockquote class="avis-texte">"${p.avis}"</blockquote>` : ''}
+    </div>
+  ` : '';
+
+  document.getElementById('projet-contenu').innerHTML =
+    (details ? details.split('|').map(para => `<p>${para.trim()}</p>`).join('') : '<p style="color:#888">Aucune description détaillée pour ce projet.</p>')
+    + starsHtml;
+
+  showPage('projet');
+}
