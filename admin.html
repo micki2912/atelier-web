@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Atelier Web du Lac</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f0f4f8; color: #1a2a3a; min-height: 100vh; }
+
+    header {
+      background: #1A3F6F;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 1.1rem; font-weight: 500; }
+    header a { color: rgba(255,255,255,.7); font-size: .85rem; text-decoration: none; }
+    header a:hover { color: #fff; }
+
+    .body { max-width: 720px; margin: 3rem auto; padding: 0 1.5rem; }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      margin-bottom: 1.5rem;
+    }
+    .card h2 { font-size: 1.15rem; margin-bottom: .5rem; }
+    .card p { color: #4b5563; font-size: .93rem; line-height: 1.6; margin-bottom: 1rem; }
+
+    .btn {
+      display: inline-block;
+      padding: .75rem 1.5rem;
+      background: #1A3F6F;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: .95rem;
+      font-weight: 500;
+    }
+    .btn:hover { background: #163356; }
+    .btn-outline {
+      background: none;
+      border: 1.5px solid #1A3F6F;
+      color: #1A3F6F;
+      margin-left: .75rem;
+    }
+    .btn-outline:hover { background: #EEF4FA; }
+
+    .steps { counter-reset: step; display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+    .step { display: flex; gap: 1rem; align-items: flex-start; }
+    .step-num {
+      counter-increment: step;
+      background: #1A3F6F;
+      color: #fff;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+    .step-num::after { content: counter(step); }
+    .step-text { font-size: .9rem; color: #374151; line-height: 1.55; }
+    .step-text strong { color: #1a2a3a; }
+
+    code {
+      background: #f3f4f6;
+      padding: .15rem .45rem;
+      border-radius: 4px;
+      font-size: .85rem;
+      font-family: monospace;
+    }
+
+    .columns-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+      margin-top: .75rem;
+    }
+    .columns-table th {
+      text-align: left;
+      padding: .5rem .75rem;
+      background: #f3f4f6;
+      color: #374151;
+      font-weight: 600;
+    }
+    .columns-table td { padding: .5rem .75rem; border-top: 1px solid #e5e7eb; color: #4b5563; }
+    .required { color: #dc2626; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Admin — Portfolio</h1>
+  <a href="index.html">← Retour au site</a>
+</header>
+
+<div class="body">
+
+  <div class="card">
+    <h2>Gérer le portfolio</h2>
+    <p>Les projets sont stockés dans un Google Sheet. Ouvrez-le pour ajouter, modifier ou supprimer des projets — le site se met à jour automatiquement.</p>
+    <a class="btn" id="sheet-link" href="#" target="_blank">Ouvrir Google Sheets</a>
+    <a class="btn btn-outline" href="index.html#" onclick="event.preventDefault();window.opener=null;window.open('index.html');return false;">Voir le site public</a>
+  </div>
+
+  <div class="card">
+    <h2>Structure des colonnes</h2>
+    <p>Votre Google Sheet doit avoir ces colonnes en première ligne :</p>
+    <table class="columns-table">
+      <thead><tr><th>Colonne</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>titre</code> <span class="required">*</span></td><td>Nom du projet (ex : Site vitrine — Cave Dupont)</td></tr>
+        <tr><td><code>client</code> <span class="required">*</span></td><td>Nom du client</td></tr>
+        <tr><td><code>categorie</code></td><td>Type : Site vitrine, E-commerce, SEO, Refonte…</td></tr>
+        <tr><td><code>description</code></td><td>Texte court décrivant le projet (2–3 phrases)</td></tr>
+        <tr><td><code>url</code></td><td>Lien vers le site réalisé (https://…)</td></tr>
+        <tr><td><code>image_url</code></td><td>Lien https://… <em>ou</em> chemin local : <code>images/monprojet.jpg</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Configuration initiale</h2>
+    <p>Première utilisation ? Suivez ces étapes :</p>
+    <div class="steps">
+      <div class="step"><div class="step-num"></div><div class="step-text">
+        Créez un <strong>Google Sheet</strong> avec les colonnes ci-dessus en première ligne.
+      </div></div>
+      <div class="step"><div class="step-num"></div><div class="step-text">
+        Dans le Sheet : <strong>Fichier → Partager → Publier sur le web</strong> → choisissez <em>Feuille 1</em> et format <em>CSV</em> → cliquez <strong>Publier</strong>.
+      </div></div>
+      <div class="step"><div class="step-num"></div><div class="step-text">
+        Copiez l'URL obtenue et collez-la dans <code>js/supabase-config.js</code> à la ligne <code>SHEET_CSV_URL</code>.
+      </div></div>
+      <div class="step"><div class="step-num"></div><div class="step-text">
+        Mettez également à jour la constante <code>SHEET_EDIT_URL</code> ci-dessous avec le lien d'édition de votre Sheet (pour que le bouton "Ouvrir" fonctionne).
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/supabase-config.js"></script>
+<script>
+  // Lien vers le Google Sheet en mode édition
+  // Remplacez par l'URL de votre Sheet
+  const SHEET_EDIT_URL = typeof window.SHEET_EDIT_URL !== 'undefined'
+    ? window.SHEET_EDIT_URL
+    : 'https://docs.google.com/spreadsheets';
+
+  document.getElementById('sheet-link').href = SHEET_EDIT_URL;
+</script>
+
+</body>
+</html>

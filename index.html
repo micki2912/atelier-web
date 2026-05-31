@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Web du Lac – Création de sites web, Vully</title>
+  <meta name="description" content="Création de sites web sur mesure pour les artisans, restaurateurs et PME de la région du Vully et du Lac de Morat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav>
+    <a class="nav-logo" href="#" onclick="showPage('accueil')">
+      <svg viewBox="0 0 200 52" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 32 C22 32 34 27 50 20 C63 14 74 8 84 5 C93 2 102 2 112 6 C124 11 137 19 152 26 C165 32 176 34 185 34"
+              fill="none" stroke="#1A3F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="6" y1="38" x2="187" y2="38" stroke="#1A3F6F" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M8 46 Q70 43 130 46 Q165 48 185 46" fill="none" stroke="#1A3F6F" stroke-width="0.9" stroke-linecap="round" opacity="0.4"/>
+        <text font-family="monospace" font-size="9" fill="#1A3F6F" opacity="0.65" transform="translate(30, 28) rotate(-18)">www</text>
+        <text x="8" y="50" font-family="Georgia, serif" font-size="11" fill="#1A3F6F" letter-spacing="0.3">Atelier Web du Lac</text>
+      </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('accueil')">Accueil</a></li>
+      <li><a href="#" onclick="showPage('services')">Services</a></li>
+      <li><a href="#" onclick="showPage('portfolio')">Portfolio</a></li>
+      <li><a href="#" onclick="showPage('contact')" class="nav-cta">Parlons de votre projet</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       PAGE ACCUEIL
+  ══════════════════════════════════ -->
+  <div class="page active" id="page-accueil">
+
+    <div class="hero">
+      <div class="hero-bg">
+        <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 160 C120 160 220 140 360 120 C500 100 580 80 720 90 C860 100 940 140 1080 150 C1220 160 1340 155 1440 150 L1440 220 L0 220 Z" fill="#EEF4FA" opacity="0.6"/>
+          <path d="M0 180 C180 175 340 185 540 180 C740 175 900 170 1100 175 C1260 178 1360 180 1440 178 L1440 220 L0 220 Z" fill="#EEF4FA" opacity="0.9"/>
+          <path d="M-20 160 C80 160 180 130 320 90 C420 62 520 30 640 18 C740 8 830 10 940 30 C1060 52 1180 100 1300 140 C1380 162 1430 168 1460 168"
+                fill="none" stroke="#1A3F6F" stroke-width="1.5" stroke-linecap="round" opacity="0.08"/>
+        </svg>
+      </div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">Région du Vully · Lac de Morat</p>
+        <h1>Votre présence web,<br><em>ancrée dans le Vully</em></h1>
+        <p class="hero-sub">Je crée des sites web sur mesure pour les artisans, restaurateurs, hôtels et PME de la région. Simple, rapide, efficace — et toujours proche de vous.</p>
+        <div>
+          <a href="#" class="btn-primary" onclick="showPage('contact')">Discutons de votre projet</a>
+          <a href="#" class="btn-outline" onclick="showPage('services')">Découvrir les offres</a>
+        </div>
+        <div class="stats">
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Sites codés sur mesure</div>
+          </div>
+          <div>
+            <div class="stat-num">Local</div>
+            <div class="stat-label">Je connais votre région</div>
+          </div>
+          <div>
+            <div class="stat-num">Rapide</div>
+            <div class="stat-label">Livraison en 2–3 semaines</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="section-blanc">
+      <p class="section-label">Pourquoi l'Atelier Web du Lac</p>
+      <h2 class="section-title">Une agence du coin,<br>qui comprend vos clients</h2>
+      <p class="section-sub">Je ne suis pas une grande agence anonyme à Lausanne ou Berne. Je vis et travaille dans le Vully, je connais vos clients, vos concurrents, et ce qui fait la spécificité de notre région.</p>
+      <div class="valeurs-grid">
+        <div>
+          <div class="valeur-titre">Proximité</div>
+          <p class="valeur-texte">On se rencontre en personne, on parle le même langage, et je suis disponible quand vous en avez besoin.</p>
+        </div>
+        <div>
+          <div class="valeur-titre">Sur mesure</div>
+          <p class="valeur-texte">Pas de templates génériques. Chaque site est conçu pour votre activité, vos clients, et votre image.</p>
+        </div>
+        <div>
+          <div class="valeur-titre">Accompagnement</div>
+          <p class="valeur-texte">De la première discussion jusqu'au lancement et au-delà, je reste votre interlocuteur unique.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-label">Nos services</p>
+      <h2 class="section-title">Ce que je fais pour vous</h2>
+      <p class="section-sub">De la création de votre site à votre visibilité sur Google, je m'occupe de tout votre écosystème numérique.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h3>Site vitrine</h3>
+          <p>Un site élégant et rapide qui présente votre activité, vos services et vous permet d'être trouvé sur Google.</p>
+          <div class="service-price">dès 800 CHF</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <h3>SEO local</h3>
+          <p>Apparaître en premier sur Google quand un client cherche votre métier dans le Vully. Optimisation complète.</p>
+          <div class="service-price">inclus dans Pro & Business</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3>Maintenance</h3>
+          <p>Mises à jour, sauvegardes, hébergement et petites modifications mensuelles. Votre site reste toujours à jour.</p>
+          <div class="service-price">dès 90 CHF / mois</div>
+        </div>
+      </div>
+      <div class="section-cta">
+        <a href="#" class="btn-primary" onclick="showPage('services')">Voir tous les tarifs</a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ══════════════════════════════════
+       PAGE SERVICES
+  ══════════════════════════════════ -->
+  <div class="page" id="page-services">
+    <section class="section-top">
+      <p class="section-label">Tarifs & prestations</p>
+      <h2 class="section-title">Des offres claires,<br>sans mauvaise surprise</h2>
+      <p class="section-sub">Tous les prix sont en CHF TTC. L'hébergement et le nom de domaine sont facturés séparément selon vos besoins.</p>
+
+      <div class="forfaits-grid">
+        <div class="forfait-card">
+          <div class="forfait-name">Starter</div>
+          <div class="forfait-price">800 <span>CHF</span></div>
+          <ul class="forfait-features">
+            <li>Site vitrine 5 pages</li>
+            <li>Responsive mobile</li>
+            <li>Formulaire de contact</li>
+            <li>Google Maps intégré</li>
+            <li>1 mois de maintenance inclus</li>
+          </ul>
+          <p class="forfait-note">Idéal pour artisans, thérapeutes, associations</p>
+        </div>
+        <div class="forfait-card featured">
+          <div class="forfait-badge">Le plus demandé</div>
+          <div class="forfait-name">Pro</div>
+          <div class="forfait-price">1 500 <span>CHF</span></div>
+          <ul class="forfait-features">
+            <li>Jusqu'à 10 pages</li>
+            <li>SEO on-page complet</li>
+            <li>Google Business Profile</li>
+            <li>Textes & photos optimisés</li>
+            <li>Remise en main personnalisée</li>
+            <li>3 mois de maintenance inclus</li>
+          </ul>
+          <p class="forfait-note">Idéal pour restaurateurs, hôtels, domaines viticoles</p>
+        </div>
+        <div class="forfait-card">
+          <div class="forfait-name">Business</div>
+          <div class="forfait-price">Sur devis <span class="forfait-price-sub">dès 3 000</span></div>
+          <ul class="forfait-features">
+            <li>Pages illimitées</li>
+            <li>Boutique e-commerce</li>
+            <li>Multilingue FR / DE / EN</li>
+            <li>Intégrations sur mesure</li>
+            <li>Stratégie SEO avancée</li>
+            <li>6 mois de maintenance inclus</li>
+          </ul>
+          <p class="forfait-note">Idéal pour PME, commerces, caves viticoles</p>
+        </div>
+      </div>
+
+      <div class="maintenance-section">
+        <p class="section-label">Maintenance mensuelle</p>
+        <h3 class="sub-title">Restez serein, je m'occupe du reste</h3>
+        <p class="sub-text">Après les mois offerts, continuez avec un forfait mensuel adapté à vos besoins.</p>
+        <div class="maintenance-grid">
+          <div class="maintenance-card">
+            <div class="maintenance-name">Essentiel</div>
+            <div class="maintenance-price">90 <span>CHF/mois</span></div>
+            <p>Hébergement + sauvegardes + 1h de modifications</p>
+          </div>
+          <div class="maintenance-card">
+            <div class="maintenance-name">Confort</div>
+            <div class="maintenance-price">180 <span>CHF/mois</span></div>
+            <p>Essentiel + 3h de modifications + rapport mensuel</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-section">
+        <p class="section-label">Comment ça se passe</p>
+        <h3 class="sub-title">De l'idée au site en ligne</h3>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h3>On se rencontre</h3>
+              <p>Un café ou un appel pour comprendre votre activité, vos clients et ce que vous attendez de votre site.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h3>Je vous fais une proposition</h3>
+              <p>Devis détaillé, maquette de l'accueil et planning de réalisation. Aucune surprise.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h3>Je développe votre site</h3>
+              <p>Développement complet avec une version de prévisualisation à chaque étape pour vos retours.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h3>On met en ligne ensemble</h3>
+              <p>Lancement, remise en main, et je reste disponible pour toutes vos questions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-cta">
+        <a href="#" class="btn-primary" onclick="showPage('contact')">Demander un devis gratuit</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PAGE PORTFOLIO
+  ══════════════════════════════════ -->
+  <div class="page" id="page-portfolio">
+    <section class="section-top">
+      <p class="section-label">Réalisations</p>
+      <h2 class="section-title">Des sites qui travaillent<br>pour leurs propriétaires</h2>
+      <p class="section-sub">Chaque projet est unique, conçu pour les besoins spécifiques du client et de sa clientèle locale.</p>
+
+      <div id="portfolio-grid" class="portfolio-grid" style="display:none"></div>
+
+      <div id="portfolio-coming" class="portfolio-coming">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <rect x="3" y="3" width="18" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        Les premières réalisations arrivent bientôt.<br>
+        <span>Vous souhaitez être parmi mes premiers clients ?</span>
+      </div>
+
+      <div class="offre-lancement">
+        <p class="section-label">Offre de lancement</p>
+        <h3 class="sub-title">–20% pour les 5 premiers clients</h3>
+        <p class="sub-text">Je construis mon portfolio avec des projets réels dans la région du Vully. En échange d'une réduction, votre site sera mis en avant ici dès sa livraison.</p>
+        <a href="#" class="btn-primary" onclick="showPage('contact')">Je suis intéressé</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PAGE CONTACT
+  ══════════════════════════════════ -->
+  <div class="page" id="page-contact">
+    <section class="section-top">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p class="section-label">Parlons de votre projet</p>
+          <h2>Prêt à lancer<br>votre site ?</h2>
+          <p>Décrivez-moi votre activité et ce que vous cherchez. Je vous réponds sous 24h avec une première estimation gratuite.</p>
+          <div class="contact-detail">
+            <div class="contact-row">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <span>Région du Vully, Lac de Morat</span>
+            </div>
+            <div class="contact-row">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <!-- REMPLACEZ PAR VOTRE EMAIL -->
+              <span>hello@atelierwebdulac.ch</span>
+            </div>
+            <div class="contact-row">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+              </div>
+              <!-- REMPLACEZ PAR VOTRE NUMÉRO -->
+              <span>+41 XX XXX XX XX</span>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>Votre nom *</label>
+            <input type="text" placeholder="Marie Dupont" required>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" placeholder="marie@exemple.ch" required>
+          </div>
+          <div class="form-group">
+            <label>Votre activité</label>
+            <input type="text" placeholder="Domaine viticole, restaurant, hôtel…">
+          </div>
+          <div class="form-group">
+            <label>Formule souhaitée <span class="label-optional">(optionnel)</span></label>
+            <select name="formule">
+              <option value="">— Pas encore décidé —</option>
+              <option value="starter">Starter — 800 CHF (site vitrine 5 pages)</option>
+              <option value="pro">Pro — 1 500 CHF (jusqu'à 10 pages + SEO)</option>
+              <option value="business">Business — Sur devis (e-commerce, sur mesure)</option>
+              <option value="maintenance">Maintenance uniquement</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea rows="4" placeholder="Décrivez votre projet, vos besoins, vos questions…"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Envoyer ma demande</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-left">
+      <strong>Atelier Web du Lac</strong><br>
+      Création de sites web · Région du Vully
+    </div>
+    <div class="footer-right">
+      <a href="#" onclick="showPage('services')">Services</a> ·
+      <a href="#" onclick="showPage('contact')">Contact</a><br>
+      <span>© 2025 Atelier Web du Lac</span>
+    </div>
+  </footer>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
