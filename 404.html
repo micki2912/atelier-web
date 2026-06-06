@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable – Atelier Web du Lac</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #FAF9F6;
+      color: #2C2C2A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .num {
+      font-family: 'Lora', serif;
+      font-size: clamp(6rem, 20vw, 10rem);
+      color: #EEF4FA;
+      line-height: 1;
+      margin-bottom: 0;
+    }
+
+    svg.wave {
+      width: min(320px, 90%);
+      margin: -1rem auto 2rem;
+      display: block;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: #2C2C2A;
+    }
+    h1 em { font-style: italic; color: #1A3F6F; }
+
+    p {
+      font-size: 1rem;
+      color: #888780;
+      max-width: 420px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #1A3F6F;
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: background .2s;
+    }
+    .btn:hover { background: #163356; }
+
+    .footer-note {
+      margin-top: 3rem;
+      font-size: 12px;
+      color: #ccc;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="num">404</div>
+
+  <svg class="wave" viewBox="0 0 320 60" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 40 C40 40 70 20 110 15 C150 10 180 30 220 32 C260 34 290 25 320 28"
+          fill="none" stroke="#1A3F6F" stroke-width="1.8" stroke-linecap="round" opacity="0.3"/>
+    <line x1="0" y1="46" x2="320" y2="46" stroke="#1A3F6F" stroke-width="1" opacity="0.12"/>
+    <line x1="10" y1="52" x2="310" y2="52" stroke="#1A3F6F" stroke-width="0.6" opacity="0.07"/>
+  </svg>
+
+  <h1>Cette page s'est <em>perdue dans le lac</em></h1>
+  <p>La page que vous cherchez n'existe pas ou a été déplacée. Pas de panique — revenez à l'accueil !</p>
+
+  <a href="/" class="btn">Retour à l'accueil</a>
+
+  <p class="footer-note">Atelier Web du Lac · atelierweblac.ch</p>
+
+</body>
+</html>

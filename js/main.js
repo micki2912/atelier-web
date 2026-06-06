@@ -41,6 +41,34 @@ function showPage(id) {
   }
 }
 
+/* ── BOUTON RETOUR EN HAUT ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('btn-top').classList.toggle('visible', window.scrollY > 300);
+});
+
+/* ── ANIMATIONS AU SCROLL ── */
+function initReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.classList.add('visible');
+        observer.unobserve(el.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// Relance l'observer à chaque changement de page
+const _origShowPage = showPage;
+showPage = function(id) {
+  _origShowPage(id);
+  setTimeout(initReveal, 50);
+};
+
+initReveal();
+
 /* ── MENU HAMBURGER ── */
 function toggleMenu() {
   const links = document.getElementById('nav-links');
@@ -65,12 +93,33 @@ function closeMenu() {
  *     headers: { 'Accept': 'application/json' }
  *   });
  */
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
   const btn = e.target.querySelector('.form-submit');
-  btn.textContent = 'Message envoyé !';
-  btn.style.background = '#2A5E38';
+  btn.textContent = 'Envoi en cours…';
   btn.disabled = true;
+
+  try {
+    const res = await fetch('https://formspree.io/f/mvznzypq', {
+      method: 'POST',
+      body: new FormData(e.target),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      btn.textContent = 'Message envoyé ✓';
+      btn.style.background = '#2A5E38';
+      e.target.reset();
+    } else {
+      btn.textContent = 'Erreur — réessayez';
+      btn.style.background = '#dc2626';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Erreur — réessayez';
+    btn.style.background = '#dc2626';
+    btn.disabled = false;
+  }
 }
 
 /* ── PORTFOLIO GOOGLE SHEETS ── */
