@@ -6,6 +6,12 @@
  * Affiche une page et masque les autres
  * @param {string} id - identifiant de la page (accueil, services, portfolio, contact)
  */
+/* ── ANCRES URL ── */
+function getPageFromHash() {
+  const hash = window.location.hash.replace('#', '');
+  return ['accueil','services','portfolio','contact','mentions'].includes(hash) ? hash : 'accueil';
+}
+
 const SEO_PAGES = {
   accueil: {
     title: 'Création de site web Vully – Atelier Web du Lac | Sugiez, Môtier, Morat',
@@ -39,6 +45,48 @@ function showPage(id) {
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', seo.desc);
   }
+  // Met à jour l'ancre dans l'URL
+  history.pushState(null, '', '#' + id);
+}
+
+// Charge la bonne page selon l'ancre à l'arrivée
+window.addEventListener('DOMContentLoaded', () => {
+  showPage(getPageFromHash());
+});
+
+/* ── COMPTEUR ANIMÉ (stats hero) ── */
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 1200;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start + suffix;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+function initCounters() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target, 100, '%');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-num[data-count]').forEach(el => observer.observe(el));
+}
+
+/* ── SWIPE PORTFOLIO (mobile) ── */
+function initSwipe(el) {
+  let startX = 0;
+  el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) el.scrollBy({ left: diff > 0 ? 300 : -300, behavior: 'smooth' });
+  }, { passive: true });
 }
 
 /* ── BOUTON RETOUR EN HAUT ── */
@@ -69,16 +117,19 @@ showPage = function(id) {
 
 initReveal();
 
-/* ── MENU HAMBURGER ── */
+/* ── MENU HAMBURGER + OVERLAY ── */
 function toggleMenu() {
-  const links = document.getElementById('nav-links');
-  const btn   = document.getElementById('nav-hamburger');
+  const links   = document.getElementById('nav-links');
+  const btn     = document.getElementById('nav-hamburger');
+  const overlay = document.getElementById('nav-overlay');
   links.classList.toggle('open');
   btn.classList.toggle('active');
+  overlay.classList.toggle('open');
 }
 function closeMenu() {
   document.getElementById('nav-links').classList.remove('open');
   document.getElementById('nav-hamburger').classList.remove('active');
+  document.getElementById('nav-overlay').classList.remove('open');
 }
 
 /**
@@ -170,7 +221,7 @@ async function loadPortfolio() {
       return `
       <div class="portfolio-card" onclick="openProjet(${i})" style="cursor:pointer">
         ${imgSrc
-          ? `<img class="portfolio-img" src="${imgSrc}" alt="${p.titre}" onerror="this.style.display='none'">`
+          ? `<img class="portfolio-img" src="${imgSrc}" alt="${p.titre}" loading="lazy" onerror="this.style.display='none'">`
           : `<div class="portfolio-img-placeholder"></div>`}
         <div class="portfolio-body">
           <span class="portfolio-badge">${p.categorie || 'Projet'}</span>
@@ -189,7 +240,15 @@ async function loadPortfolio() {
   }
 }
 
-loadPortfolio();
+loadPortfolio().then(() => {
+  const grid = document.getElementById('portfolio-grid');
+  if (grid) initSwipe(grid);
+});
+
+// Lazy loading images portfolio
+document.addEventListener('DOMContentLoaded', () => {
+  initCounters();
+});
 
 /* ── PAGE DÉTAIL PROJET ── */
 function openProjet(index) {
