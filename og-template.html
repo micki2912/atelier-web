@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: 'Georgia', serif;
+      background: #FAF9F6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 70px 90px;
+      position: relative;
+    }
+
+    /* Décoration vague en arrière-plan */
+    .bg-wave {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      opacity: 0.06;
+    }
+
+    /* Bande bleue à gauche */
+    .accent {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 10px;
+      background: #1A3F6F;
+    }
+
+    .left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .label {
+      font-family: 'Arial', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #5A8AAA;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 62px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: #2C2C2A;
+      margin-bottom: 28px;
+    }
+    h1 em { font-style: italic; color: #1A3F6F; }
+
+    .sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 20px;
+      color: #888780;
+      line-height: 1.6;
+      max-width: 560px;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 100%;
+      padding: 10px 0;
+      z-index: 1;
+    }
+
+    .logo-zone {
+      text-align: right;
+    }
+    .logo-name {
+      font-size: 22px;
+      color: #1A3F6F;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    .logo-sub {
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #5A8AAA;
+      margin-top: 4px;
+    }
+
+    .badge {
+      background: #1A3F6F;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      letter-spacing: 0.03em;
+    }
+
+    .url {
+      font-family: 'Arial', sans-serif;
+      font-size: 15px;
+      color: #aaa;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent"></div>
+
+  <svg class="bg-wave" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 200 C200 200 350 80 600 60 C850 40 1000 180 1200 180 L1200 300 L0 300 Z" fill="#1A3F6F"/>
+  </svg>
+
+  <div class="left">
+    <div class="label">Région du Vully · Lac de Morat</div>
+    <h1>Votre site web,<br><em>ancré dans le Vully</em></h1>
+    <p class="sub">Création de sites web sur mesure pour artisans, restaurateurs et PME. Dès 480 CHF.</p>
+  </div>
+
+  <div class="right">
+    <div class="logo-zone">
+      <div class="logo-name">Atelier Web du Lac</div>
+      <div class="logo-sub">Vully · Création web</div>
+    </div>
+    <div class="badge">Devis gratuit →</div>
+    <div class="url">atelierweblac.ch</div>
+  </div>
+</body>
+</html>

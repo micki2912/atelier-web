@@ -6,12 +6,38 @@
  * Affiche une page et masque les autres
  * @param {string} id - identifiant de la page (accueil, services, portfolio, contact)
  */
+const SEO_PAGES = {
+  accueil: {
+    title: 'Création de site web Vully – Atelier Web du Lac | Sugiez, Môtier, Morat',
+    desc:  'Création de site internet pas chère et sur mesure pour artisans, restaurateurs et PME du Vully. Sites rapides, modernes et visibles sur Google. Devis gratuit.'
+  },
+  services: {
+    title: 'Tarifs & services – Création site web dès 480 CHF | Atelier Web du Lac',
+    desc:  'Forfaits Starter dès 480 CHF, Pro dès 720 CHF. Création de sites web sur mesure pour les entreprises du Vully et de la région de Morat. Devis gratuit.'
+  },
+  portfolio: {
+    title: 'Portfolio – Réalisations web Vully | Atelier Web du Lac',
+    desc:  'Découvrez les sites web réalisés pour des entreprises locales du Vully et de la région du Lac de Morat. Sites vitrine, e-commerce, SEO local.'
+  },
+  contact: {
+    title: 'Contact – Demande de devis gratuit | Atelier Web du Lac',
+    desc:  'Contactez Atelier Web du Lac pour votre projet de site web. Basé à Sugiez, dans le Vully. Réponse sous 24h, devis gratuit.'
+  }
+};
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById('page-' + id);
   if (el) {
     el.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Met à jour le titre et la meta description
+  const seo = SEO_PAGES[id];
+  if (seo) {
+    document.title = seo.title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', seo.desc);
   }
 }
 
