@@ -1,11 +1,33 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+const CLIENTS_DB = 'aa0afbd9-8a2d-4726-8c93-46e44d7e0169';
+const FACTURES_DB = '7a9ff1cc-8683-4e5b-af99-c0ff8a55f24e';
 
-function readJSON(filePath) {
-  try {
-    return JSON.parse(readFileSync(filePath, 'utf8'));
-  } catch {
-    return null;
+async function notionQuery(databaseId, filter) {
+  const token = process.env.NOTION_TOKEN;
+  const body = filter ? { filter } : {};
+  const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error(`Notion ${res.status}`);
+  return res.json();
+}
+
+function prop(page, name) {
+  const p = page.properties[name];
+  if (!p) return '';
+  switch (p.type) {
+    case 'title': return p.title.map(t => t.plain_text).join('');
+    case 'rich_text': return p.rich_text.map(t => t.plain_text).join('');
+    case 'number': return p.number;
+    case 'select': return p.select?.name || '';
+    case 'url': return p.url || '';
+    case 'date': return p.date?.start || '';
+    default: return '';
   }
 }
 
@@ -16,27 +38,48 @@ export default async function handler(req, res) {
 
   const { action, code } = req.query;
   if (!code) return res.status(400).json({ error: 'Code manquant' });
+  if (!process.env.NOTION_TOKEN) return res.status(500).json({ error: 'NOTION_TOKEN manquant' });
 
-  const dataDir = join(process.cwd(), 'data');
-  const clients = readJSON(join(dataDir, 'clients.json'));
-  if (!clients) return res.status(500).json({ error: 'Données non disponibles' });
+  try {
+    const clientsData = await notionQuery(CLIENTS_DB, {
+      property: 'Code',
+      rich_text: { equals: code.toUpperCase() }
+    });
 
-  const client = clients.find(c => c.code && c.code.toLowerCase() === code.toLowerCase());
-  if (!client) return res.status(401).json({ error: 'Code invalide' });
+    if (!clientsData.results.length) return res.status(401).json({ error: 'Code invalide' });
 
-  if (action === 'ping') {
-    return res.json({ v: 2, cwd: process.cwd(), clients: clients.length });
+    const page = clientsData.results[0];
+    const client = {
+      nom: prop(page, 'Nom'),
+      forfait: prop(page, 'Forfait'),
+      prix_chf: String(prop(page, 'Prix CHF')),
+      statut: prop(page, 'Statut'),
+      sites: prop(page, 'Sites').split(',').map(s => s.trim()).filter(Boolean),
+      pages: prop(page, 'Pages').split(',').map(s => s.trim()).filter(Boolean),
+      vercel_project_id: prop(page, 'Vercel Project ID')
+    };
+
+    if (action === 'ping') return res.json({ v: 3, source: 'notion', nom: client.nom });
+
+    if (action === 'login') return res.json(client);
+
+    if (action === 'factures') {
+      const facturesData = await notionQuery(FACTURES_DB, {
+        property: 'Client Code',
+        rich_text: { equals: code.toUpperCase() }
+      });
+      const factures = facturesData.results.map(p => ({
+        numero: prop(p, 'Numéro'),
+        date: prop(p, 'Date'),
+        montant_chf: String(prop(p, 'Montant CHF')),
+        statut: prop(p, 'Statut'),
+        url: prop(p, 'URL PDF')
+      }));
+      return res.json(factures);
+    }
+
+    return res.status(400).json({ error: 'Action inconnue' });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
-
-  if (action === 'login') {
-    const { code: _code, ...safeClient } = client;
-    return res.json(safeClient);
-  }
-
-  if (action === 'factures') {
-    const factures = readJSON(join(dataDir, 'factures', `${client.code.toUpperCase()}.json`)) || [];
-    return res.json(factures);
-  }
-
-  return res.status(400).json({ error: 'Action inconnue' });
 }
