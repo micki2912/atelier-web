@@ -269,7 +269,7 @@ function addModif() {
     </div>
     <div class="form-group">
       <label>Lien vers un fichier (optionnel)</label>
-      <input type="url" name="lien_${n}" placeholder="OneDrive, Google Drive, Dropbox…">
+      <input type="url" name="lien_${n}" placeholder="Lien SwissTransfer, OneDrive, Google Drive…">
     </div>
   `;
   container.appendChild(div);
