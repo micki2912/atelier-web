@@ -96,7 +96,9 @@ function renderApercu(data) {
       }).join('')}</div>`
     : '<p style="color:var(--grey);font-size:.9rem">Aucun site configuré</p>';
 
+  const prenom = data.prenom || data.nom || '';
   document.getElementById('apercu-content').innerHTML = `
+    ${prenom ? `<p style="font-family:'Lora',serif;font-size:1.4rem;margin-bottom:1.2rem">Bonjour <em>${prenom}</em> 👋</p>` : ''}
     <div class="forfait-card">
       <div class="forfait-label">Votre forfait</div>
       <div class="forfait-name">${data.forfait || '—'}</div>

@@ -51,6 +51,7 @@ export default async function handler(req, res) {
     const page = clientsData.results[0];
     const client = {
       nom: prop(page, 'Nom'),
+      prenom: prop(page, 'Prénom contact'),
       forfait: prop(page, 'Forfait'),
       prix_chf: String(prop(page, 'Prix CHF')),
       statut: prop(page, 'Statut'),
