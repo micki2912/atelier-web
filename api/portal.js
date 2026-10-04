@@ -27,6 +27,7 @@ function prop(page, name) {
     case 'select': return p.select?.name || '';
     case 'url': return p.url || '';
     case 'date': return p.date?.start || '';
+    case 'formula': return p.formula?.date?.start || p.formula?.string || '';
     default: return '';
   }
 }
