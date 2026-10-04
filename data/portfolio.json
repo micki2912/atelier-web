@@ -1,0 +1,18 @@
+[
+  {
+    "titre": "La petite fée",
+    "client": "La petite fée",
+    "categorie": "Site vitrine",
+    "description": "Site vitrine pour une entreprise locale de la région du Vully.",
+    "url": "https://lapetitefee.ch",
+    "image": ""
+  },
+  {
+    "titre": "Institut Rivage",
+    "client": "Institut Rivage",
+    "categorie": "Site vitrine",
+    "description": "Site vitrine pour un institut de beauté.",
+    "url": "https://rivage-beaute-maquette.vercel.app",
+    "image": ""
+  }
+]
