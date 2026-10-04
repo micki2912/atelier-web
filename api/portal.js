@@ -72,6 +72,7 @@ export default async function handler(req, res) {
       const factures = facturesData.results.map(p => ({
         numero: prop(p, 'Numéro'),
         date: prop(p, 'Date'),
+        echeance: prop(p, 'Échéance'),
         montant_chf: String(prop(p, 'Montant CHF')),
         statut: prop(p, 'Statut'),
         url: prop(p, 'URL PDF')

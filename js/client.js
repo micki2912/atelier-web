@@ -136,16 +136,18 @@ async function loadFactures() {
           <h2 class="card-title">${title}</h2>
           <table class="factures-table">
             <thead><tr>
-              <th>N°</th><th>Date</th><th>Montant</th><th>Statut</th><th>Lien</th>
+              <th>N°</th><th>Date</th><th>Échéance</th><th>Montant</th><th>Statut</th><th>Lien</th>
             </tr></thead>
             <tbody>${rows.map(f => {
               const badge = f.statut.toLowerCase() === 'payée' ? 'badge-green'
                           : f.statut.toLowerCase().includes('retard') ? 'badge-red'
                           : 'badge-blue';
               const driveUrl = convertOneDriveUrl(f.url);
+              const fmtDate = d => d ? new Date(d).toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
               return `<tr>
                 <td><strong>${f.numero || '—'}</strong></td>
-                <td>${f.date || '—'}</td>
+                <td>${fmtDate(f.date)}</td>
+                <td>${fmtDate(f.echeance)}</td>
                 <td>CHF ${f.montant_chf || '—'}</td>
                 <td><span class="badge ${badge}">${f.statut}</span></td>
                 <td>${driveUrl ? `<a class="btn-download" href="${driveUrl}" target="_blank" rel="noopener">
