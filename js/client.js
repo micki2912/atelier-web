@@ -268,8 +268,8 @@ function addModif() {
       <textarea name="description_${n}" placeholder="Décrivez précisément ce que vous souhaitez modifier…" required></textarea>
     </div>
     <div class="form-group">
-      <label>Fichier joint (optionnel)</label>
-      <input type="file" name="fichier_${n}" accept="image/*,.pdf,.doc,.docx">
+      <label>Lien vers un fichier (optionnel)</label>
+      <input type="url" name="lien_${n}" placeholder="OneDrive, Google Drive, Dropbox…">
     </div>
   `;
   container.appendChild(div);
@@ -296,9 +296,11 @@ async function handleModifSubmit(e) {
     const n = item.id.replace('modif-', '');
     const page = form.querySelector(`[name="page_${n}"]`)?.value || '';
     const desc = form.querySelector(`[name="description_${n}"]`)?.value || '';
+    const lien = form.querySelector(`[name="lien_${n}"]`)?.value || '';
     body += `--- Modification ${i + 1} ---\n`;
     body += `Page: ${page}\n`;
     body += `Description: ${desc}\n`;
+    if (lien) body += `Fichier: ${lien}\n`;
     body += '\n';
   });
 
@@ -306,12 +308,6 @@ async function handleModifSubmit(e) {
   formData.append('_subject', `Modification – ${_clientData.nom}`);
   formData.append('client', _clientData.nom);
   formData.append('message', body);
-
-  items.forEach((item) => {
-    const n = item.id.replace('modif-', '');
-    const fileInput = form.querySelector(`[name="fichier_${n}"]`);
-    if (fileInput?.files[0]) formData.append(`fichier_${n}`, fileInput.files[0]);
-  });
 
   try {
     const res = await fetch('https://formspree.io/f/mvznzypq', {
