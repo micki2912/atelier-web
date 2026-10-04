@@ -8,7 +8,13 @@ function oneDriveDirectUrl(shareUrl) {
 
 async function fetchSheet(shareUrl, sheetName) {
   const directUrl = oneDriveDirectUrl(shareUrl);
-  const res = await fetch(directUrl);
+  const res = await fetch(directUrl, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; AtelierWebBot/1.0)',
+      'Accept': 'application/octet-stream,*/*'
+    },
+    redirect: 'follow'
+  });
   if (!res.ok) throw new Error(`Erreur téléchargement (${res.status})`);
   const buffer = await res.arrayBuffer();
   const wb = XLSX.read(buffer, { type: 'array' });

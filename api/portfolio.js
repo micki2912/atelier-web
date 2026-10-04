@@ -16,7 +16,13 @@ export default async function handler(req, res) {
 
   try {
     const directUrl = oneDriveDirectUrl(XLSX_URL);
-    const response = await fetch(directUrl);
+    const response = await fetch(directUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; AtelierWebBot/1.0)',
+        'Accept': 'application/octet-stream,*/*'
+      },
+      redirect: 'follow'
+    });
     if (!response.ok) throw new Error(`Erreur téléchargement (${response.status})`);
 
     const buffer = await response.arrayBuffer();
