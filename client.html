@@ -96,6 +96,30 @@
 
     .login-card input:focus { border-color: var(--blue); }
 
+    .input-eye-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .input-eye-wrap input {
+      width: 100%;
+      padding-right: 2.8rem;
+      box-sizing: border-box;
+    }
+    .btn-eye {
+      position: absolute;
+      right: .75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      color: var(--grey);
+      display: flex;
+      align-items: center;
+    }
+    .btn-eye:hover { color: var(--blue); }
+
     .btn-primary {
       display: block;
       width: 100%;
@@ -545,7 +569,12 @@
     <div class="login-logo">Atelier Web <span>du Lac</span></div>
     <h1>Espace client</h1>
     <p>Entrez votre code d'accès personnel</p>
-    <input type="password" id="login-code" placeholder="••••••••" autocomplete="off" maxlength="40">
+    <div class="input-eye-wrap">
+      <input type="password" id="login-code" placeholder="••••••••" autocomplete="off" maxlength="40">
+      <button type="button" class="btn-eye" onclick="toggleCode(this)" tabindex="-1" aria-label="Afficher le code">
+        <svg id="eye-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
     <button class="btn-primary" id="login-btn" onclick="handleLogin()">Accéder à mon espace</button>
     <p class="login-error" id="login-error">Code invalide. Vérifiez votre code ou contactez-nous.</p>
     <svg class="login-wave" viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
