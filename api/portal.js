@@ -1,5 +1,5 @@
-const CLIENTS_DB = 'aa0afbd9-8a2d-4726-8c93-46e44d7e0169';
-const FACTURES_DB = '7a9ff1cc-8683-4e5b-af99-c0ff8a55f24e';
+const CLIENTS_DB = '4d968e3e2928477fb5a653df7af1e9a4';
+const FACTURES_DB = 'a1e45922579846c0af45255c5d8d5241';
 
 async function notionQuery(databaseId, filter) {
   const token = process.env.NOTION_TOKEN;
