@@ -1,28 +1,43 @@
 import * as XLSX from 'xlsx';
 
-async function fetchSheet(shareUrl, sheetName) {
-  // Résoudre le lien court 1drv.ms via HEAD, puis télécharger
-  const headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'application/octet-stream,*/*'
-  };
-
-  // Construire l'URL de téléchargement direct depuis le lien de partage
-  // Pour OneDrive consumer: encoder en base64url et appeler l'API shares
-  const encoded = Buffer.from(shareUrl).toString('base64url');
-  const apiUrl = `https://api.onedrive.com/v1.0/shares/u!${encoded}/root/content`;
-
-  let res = await fetch(apiUrl, { headers, redirect: 'follow' });
-
-  // Si ça échoue, essayer de fetch le lien court directement
-  if (!res.ok) {
-    res = await fetch(shareUrl, { headers, redirect: 'follow' });
+async function resolveDownloadUrl(shareUrl) {
+  const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
+  // Suivre les redirections manuellement pour extraire resid+authkey
+  let url = shareUrl;
+  for (let i = 0; i < 6; i++) {
+    const res = await fetch(url, {
+      method: 'GET',
+      redirect: 'manual',
+      headers: { 'User-Agent': UA }
+    });
+    const loc = res.headers.get('location');
+    if (!loc) break;
+    url = loc;
+    // Dès qu'on a un resid+authkey, construire l'URL de téléchargement
+    try {
+      const u = new URL(url);
+      const resid = u.searchParams.get('resid');
+      const authkey = u.searchParams.get('authkey') || u.searchParams.get('AuthKey');
+      if (resid && authkey) {
+        return `https://onedrive.live.com/download?resid=${encodeURIComponent(resid)}&authkey=${encodeURIComponent(authkey)}&em=2`;
+      }
+    } catch {}
   }
+  // Fallback: ajouter download=1 à l'URL finale
+  const sep = url.includes('?') ? '&' : '?';
+  return url + sep + 'download=1';
+}
 
-  if (!res.ok) throw new Error(`Erreur téléchargement (${res.status})`);
+async function fetchSheet(shareUrl, sheetName) {
+  const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
+  const downloadUrl = await resolveDownloadUrl(shareUrl);
+  const res = await fetch(downloadUrl, {
+    headers: { 'User-Agent': UA, 'Accept': 'application/octet-stream,*/*' },
+    redirect: 'follow'
+  });
+  if (!res.ok) throw new Error(`Erreur téléchargement (${res.status}) url=${downloadUrl}`);
   const ct = res.headers.get('content-type') || '';
-  if (ct.includes('text/html')) throw new Error('Réponse HTML inattendue — vérifiez les permissions du partage');
-
+  if (ct.includes('text/html')) throw new Error(`HTML reçu au lieu du fichier — url=${downloadUrl}`);
   const buffer = await res.arrayBuffer();
   const wb = XLSX.read(buffer, { type: 'array' });
   const sheet = wb.Sheets[sheetName] || wb.Sheets[wb.SheetNames[0]];
