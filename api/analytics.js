@@ -21,35 +21,16 @@ export default async function handler(req, res) {
   });
 
   try {
-    const countUrl = `https://api.vercel.com/v1/web/analytics/pageviews/count?${base}`;
     const timelineUrl = `https://api.vercel.com/v1/web/analytics/pageviews/aggregate?${new URLSearchParams({ ...Object.fromEntries(base), by: 'day' })}`;
+    const timelineRes = await fetch(timelineUrl, { headers });
+    const timelineRaw = await timelineRes.json();
 
-    const [countRes, timelineRes] = await Promise.all([
-      fetch(countUrl, { headers }),
-      fetch(timelineUrl, { headers })
-    ]);
-
-    const countText = await countRes.text();
-    const timelineText = await timelineRes.text();
-
-    let countRaw, timelineRaw;
-    try { countRaw = JSON.parse(countText); } catch { countRaw = { _parseError: countText }; }
-    try { timelineRaw = JSON.parse(timelineText); } catch { timelineRaw = { _parseError: timelineText }; }
-
-    if (!countRes.ok) {
+    if (!timelineRes.ok) {
       return res.status(200).json({
-        error: `Vercel count API ${countRes.status}`,
-        _debug: { countRaw, timelineRaw, countUrl, base: base.toString() }
+        error: `Vercel API ${timelineRes.status}: ${timelineRaw?.error?.message || 'Erreur inconnue'}`,
+        _debug: { timelineRaw, timelineUrl }
       });
     }
-
-    // Normalize count — handle multiple possible response shapes
-    const total = countRaw?.data?.pageviews
-      ?? countRaw?.data?.total
-      ?? countRaw?.pageviews
-      ?? countRaw?.total
-      ?? countRaw?.count
-      ?? null;
 
     // Normalize timeline rows
     const rows = timelineRaw?.data ?? timelineRaw?.rows ?? timelineRaw?.results ?? [];
@@ -58,8 +39,11 @@ export default async function handler(req, res) {
       count: d.pageviews ?? d.count ?? d.total ?? 0
     })) : [];
 
+    // Total = sum of all days
+    const total = timeline.reduce((sum, d) => sum + d.count, 0) || null;
+
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-    return res.json({ total, timeline, _debug: { countRaw, timelineRaw } });
+    return res.json({ total, timeline });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
