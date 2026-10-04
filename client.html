@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace client – Atelier Web du Lac</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1A3F6F;
+      --blue-mid: #2a5d9f;
+      --blue-light: #EEF4FA;
+      --cream: #FAF9F6;
+      --text: #2C2C2A;
+      --grey: #888780;
+      --border: #e5e0d8;
+      --green: #2A5E38;
+      --green-bg: #f0faf3;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --radius: 12px;
+      --shadow: 0 2px 20px rgba(26,63,111,.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      color: var(--blue);
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+
+    .login-logo span { font-style: italic; }
+
+    .login-card h1 {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin: 2rem 0 0.5rem;
+      color: var(--text);
+    }
+
+    .login-card p {
+      color: var(--grey);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--cream);
+      margin-bottom: 1rem;
+      outline: none;
+      transition: border-color .2s;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .login-card input:focus { border-color: var(--blue); }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      background: var(--blue);
+      color: #fff;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-primary:hover { background: #163356; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+    .login-error {
+      color: var(--red);
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      display: none;
+    }
+
+    .login-wave {
+      width: 120px;
+      margin: 1.5rem auto 0;
+      display: block;
+      opacity: .15;
+    }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; min-height: 100vh; }
+
+    .portal-header {
+      background: var(--blue);
+      color: #fff;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    }
+
+    .portal-header-logo {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .portal-header-logo span { font-style: italic; }
+
+    .portal-header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    #client-name-header {
+      font-size: 0.85rem;
+      opacity: .85;
+    }
+
+    .btn-logout {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-logout:hover { background: rgba(255,255,255,.25); }
+
+    /* ── TABS ── */
+    .portal-tabs {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      background: none;
+      color: var(--grey);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      white-space: nowrap;
+      transition: color .2s, border-color .2s;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* ── CONTENT ── */
+    .tab-content { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    /* ── OVERVIEW ── */
+    .forfait-card {
+      background: var(--blue);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .forfait-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .1em; opacity: .7; }
+
+    .forfait-name {
+      font-family: 'Lora', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      margin: 0.25rem 0;
+    }
+
+    .forfait-price { font-size: 1rem; opacity: .85; }
+
+    .forfait-status {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-ok { background: rgba(255,255,255,.2); color: #fff; }
+    .status-late { background: #fef2f2; color: var(--red); }
+
+    .sites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+
+    .site-card {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .site-card a {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .site-card a:hover { text-decoration: underline; }
+
+    /* ── FACTURES ── */
+    .factures-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+    .factures-table th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 500;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .factures-table th:first-child { border-radius: 6px 0 0 6px; }
+    .factures-table th:last-child { border-radius: 0 6px 6px 0; }
+
+    .factures-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-green { background: var(--green-bg); color: var(--green); }
+    .badge-blue { background: var(--blue-light); color: var(--blue); }
+    .badge-red { background: var(--red-bg); color: var(--red); }
+    .badge-amber { background: var(--amber-bg); color: var(--amber); }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.75rem;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background .2s;
+    }
+
+    .btn-download:hover { background: #d8e8f5; }
+
+    /* ── ANALYTICS ── */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-num-big {
+      font-family: 'Lora', serif;
+      font-size: 2.2rem;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    .stat-label { font-size: 0.78rem; color: var(--grey); margin-top: 0.3rem; }
+
+    .chart-container { position: relative; height: 200px; }
+
+    .analytics-unavailable {
+      text-align: center;
+      padding: 3rem;
+      color: var(--grey);
+    }
+
+    .analytics-unavailable a { color: var(--blue); }
+
+    /* ── MODIFICATIONS ── */
+    .modif-item {
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      position: relative;
+    }
+
+    .modif-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .modif-num {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: var(--grey);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.2rem;
+      line-height: 1;
+      transition: color .2s;
+    }
+
+    .btn-remove:hover { color: var(--red); }
+
+    .form-group { margin-bottom: 0.75rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--grey);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--blue); }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      border: 1.5px dashed var(--border);
+      color: var(--grey);
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      transition: border-color .2s, color .2s;
+      margin-bottom: 1rem;
+    }
+
+    .btn-add:hover { border-color: var(--blue); color: var(--blue); }
+
+    .modif-info {
+      font-size: 0.82rem;
+      color: var(--grey);
+      background: var(--blue-light);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .modif-info a { color: var(--blue); }
+
+    .submit-row { display: flex; justify-content: flex-end; }
+
+    .btn-submit {
+      background: var(--blue);
+      color: #fff;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .btn-submit:hover { background: #163356; }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    .form-success {
+      background: var(--green-bg);
+      color: var(--green);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--grey);
+    }
+
+    .empty-state svg { opacity: .3; margin-bottom: 0.75rem; }
+
+    /* ── LOADING ── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: var(--grey);
+      gap: 0.5rem;
+    }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .portal-header { padding: 0 1rem; }
+      .portal-tabs { padding: 0 1rem; }
+      .tab-content { padding: 1.25rem 1rem; }
+      .tab-btn { padding: 0.85rem 1rem; font-size: 0.82rem; }
+      .forfait-name { font-size: 1.5rem; }
+      #client-name-header { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">Atelier Web <span>du Lac</span></div>
+    <h1>Espace client</h1>
+    <p>Entrez votre code d'accès personnel</p>
+    <input type="password" id="login-code" placeholder="••••••••" autocomplete="off" maxlength="40">
+    <button class="btn-primary" id="login-btn" onclick="handleLogin()">Accéder à mon espace</button>
+    <p class="login-error" id="login-error">Code invalide. Vérifiez votre code ou contactez-nous.</p>
+    <svg class="login-wave" viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 15 C30 15 50 5 80 8 C110 11 130 20 160 18 C180 17 190 12 200 14" fill="none" stroke="#1A3F6F" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="dashboard">
+
+  <!-- Header -->
+  <header class="portal-header">
+    <div class="portal-header-logo">Atelier Web <span>du Lac</span></div>
+    <div class="portal-header-right">
+      <span id="client-name-header"></span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="portal-tabs">
+    <button class="tab-btn active" onclick="switchTab('apercu', this)">Vue d'ensemble</button>
+    <button class="tab-btn" onclick="switchTab('factures', this)">Factures</button>
+    <button class="tab-btn" onclick="switchTab('visiteurs', this)">Visiteurs</button>
+    <button class="tab-btn" onclick="switchTab('modifications', this)">Demander une modification</button>
+  </nav>
+
+  <!-- Tab: Aperçu -->
+  <div class="tab-content active" id="tab-apercu">
+    <div id="apercu-content"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
+  </div>
+
+  <!-- Tab: Factures -->
+  <div class="tab-content" id="tab-factures">
+    <div id="factures-content"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
+  </div>
+
+  <!-- Tab: Visiteurs -->
+  <div class="tab-content" id="tab-visiteurs">
+    <div id="visiteurs-content"><div class="loading"><div class="spinner"></div> Chargement…</div></div>
+  </div>
+
+  <!-- Tab: Modifications -->
+  <div class="tab-content" id="tab-modifications">
+    <div class="card">
+      <h2 class="card-title">Demander des modifications</h2>
+      <div class="modif-info">
+        💡 Décrivez les modifications souhaitées. Si vous avez des fichiers (images, logos, textes…), partagez-les via <strong>OneDrive</strong> et collez le lien de partage dans le champ prévu.
+      </div>
+      <form id="modif-form" onsubmit="handleModifSubmit(event)">
+        <input type="hidden" name="_subject" value="">
+        <input type="hidden" name="client" id="modif-client-name">
+        <div id="modif-items"></div>
+        <button type="button" class="btn-add" onclick="addModif()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter une modification
+        </button>
+        <div class="submit-row">
+          <button type="submit" class="btn-submit" id="modif-submit-btn">Envoyer la demande →</button>
+        </div>
+      </form>
+      <div class="form-success" id="modif-success">✓ Votre demande a bien été envoyée ! Nous reviendrons vers vous sous 48h.</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/client.js"></script>
+</body>
+</html>

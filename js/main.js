@@ -193,15 +193,10 @@ function parseCSV(text) {
 }
 
 async function loadPortfolio() {
-  if (typeof SHEET_CSV_URL === 'undefined' || SHEET_CSV_URL === 'VOTRE_URL_CSV') return;
-
   try {
-    const res = await fetch(SHEET_CSV_URL);
+    const res = await fetch('/api/portfolio');
     if (!res.ok) { console.error('Portfolio: réponse HTTP', res.status); return; }
-    const text = await res.text();
-    console.log('Portfolio CSV reçu:', text.substring(0, 200));
-    const projects = parseCSV(text).filter(p => p.titre);
-    console.log('Portfolio projets parsés:', projects);
+    const projects = (await res.json()).filter(p => p.titre);
 
     if (projects.length === 0) { console.warn('Portfolio: aucun projet trouvé (vérifiez les noms de colonnes)'); return; }
 
