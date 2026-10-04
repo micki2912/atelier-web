@@ -284,30 +284,22 @@ async function handleModifSubmit(e) {
 
   const form = e.target;
   const items = document.querySelectorAll('.modif-item');
-  let body = `Demande de modification de ${_clientData.nom}\n\n`;
+  const modifications = [];
 
-  items.forEach((item, i) => {
+  items.forEach(item => {
     const n = item.id.replace('modif-', '');
-    const page = form.querySelector(`[name="page_${n}"]`)?.value || '';
-    const desc = form.querySelector(`[name="description_${n}"]`)?.value || '';
-    const lien = form.querySelector(`[name="lien_${n}"]`)?.value || '';
-    body += `--- Modification ${i + 1} ---\n`;
-    body += `Page: ${page}\n`;
-    body += `Description: ${desc}\n`;
-    if (lien) body += `Fichier: ${lien}\n`;
-    body += '\n';
+    modifications.push({
+      page: form.querySelector(`[name="page_${n}"]`)?.value || '',
+      description: form.querySelector(`[name="description_${n}"]`)?.value || '',
+      lien: form.querySelector(`[name="lien_${n}"]`)?.value || ''
+    });
   });
 
-  const formData = new FormData();
-  formData.append('_subject', `Modification – ${_clientData.nom}`);
-  formData.append('client', _clientData.nom);
-  formData.append('message', body);
-
   try {
-    const res = await fetch('https://formspree.io/f/mvznzypq', {
+    const res = await fetch('/api/webhook-modif', {
       method: 'POST',
-      body: formData,
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client: _clientData.nom, modifications })
     });
 
     if (res.ok) {
