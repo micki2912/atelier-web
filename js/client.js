@@ -182,11 +182,11 @@ async function loadAnalytics() {
 
     if (data.error) throw new Error(data.error);
 
-    const total = data.count?.data?.pageviews ?? '—';
-    const timeline = data.timeline?.data || [];
+    const total = data.total ?? '—';
+    const timeline = data.timeline || [];
 
     const labels = timeline.map(d => {
-      const date = new Date(d.key ?? d.start);
+      const date = new Date(d.date);
       return date.toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit' });
     });
     const values = timeline.map(d => d.count || 0);

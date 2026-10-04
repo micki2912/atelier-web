@@ -26,10 +26,25 @@ export default async function handler(req, res) {
       fetch(`https://api.vercel.com/v1/web/analytics/pageviews/aggregate?${new URLSearchParams({ ...Object.fromEntries(base), by: 'day' })}`, { headers })
     ]);
 
-    const [count, timeline] = await Promise.all([countRes.json(), timelineRes.json()]);
+    const [countRaw, timelineRaw] = await Promise.all([countRes.json(), timelineRes.json()]);
+
+    // Normalize count — handle multiple possible response shapes
+    const total = countRaw?.data?.pageviews
+      ?? countRaw?.data?.total
+      ?? countRaw?.pageviews
+      ?? countRaw?.total
+      ?? countRaw?.count
+      ?? null;
+
+    // Normalize timeline rows
+    const rows = timelineRaw?.data ?? timelineRaw?.rows ?? timelineRaw?.results ?? [];
+    const timeline = Array.isArray(rows) ? rows.map(d => ({
+      date: d.key ?? d.start ?? d.date ?? d.timestamp ?? '',
+      count: d.pageviews ?? d.count ?? d.total ?? 0
+    })) : [];
 
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-    return res.json({ count, timeline });
+    return res.json({ total, timeline, _raw: { count: countRaw, timeline: timelineRaw } });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
