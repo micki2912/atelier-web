@@ -4,9 +4,9 @@
     "nom": "La petite fée",
     "sites": ["lapetitefee.ch"],
     "forfait": "Essentiel",
-    "prix_chf": "79",
+    "prix_chf": "12",
     "statut": "À jour",
-    "vercel_project_id": "prj_R1IpMiuIa2ZjFeviil9z01pKmZ9Q",
+    "vercel_project_id": "prj_Bvb6Ku2xiMXPibasnLIkaYILiIi1",
     "pages": ["Accueil", "Services", "Contact"]
   },
   {
@@ -14,7 +14,7 @@
     "nom": "Institut Rivage",
     "sites": ["rivage-beaute-maquette.vercel.app"],
     "forfait": "Essentiel",
-    "prix_chf": "79",
+    "prix_chf": "12",
     "statut": "À jour",
     "vercel_project_id": "prj_ZlVXSgX6G1zIcXoNOwkJczyu1Tsn",
     "pages": ["Accueil", "Services", "Contact"]

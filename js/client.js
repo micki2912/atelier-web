@@ -180,14 +180,13 @@ async function loadAnalytics() {
     const res = await fetch(`/api/analytics?projectId=${encodeURIComponent(projectId)}`);
     const data = await res.json();
 
-    if (data.error || !data.total) throw new Error(data.error || 'no data');
+    if (data.error) throw new Error(data.error);
 
-    const total = data.total?.data?.[0]?.count ?? data.total?.count ?? '—';
+    const total = data.count?.data?.pageviews ?? '—';
     const timeline = data.timeline?.data || [];
-    const pages = data.pages?.data || [];
 
     const labels = timeline.map(d => {
-      const date = new Date(d.key);
+      const date = new Date(d.key ?? d.start);
       return date.toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit' });
     });
     const values = timeline.map(d => d.count || 0);
