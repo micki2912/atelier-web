@@ -1,0 +1,22 @@
+[
+  {
+    "code": "FEE2024",
+    "nom": "La petite fée",
+    "sites": ["lapetitefee.ch"],
+    "forfait": "Essentiel",
+    "prix_chf": "79",
+    "statut": "À jour",
+    "vercel_project_id": "",
+    "pages": ["Accueil", "Services", "Contact"]
+  },
+  {
+    "code": "RIVAGE2024",
+    "nom": "Institut Rivage",
+    "sites": ["rivage-beaute-maquette.vercel.app"],
+    "forfait": "Essentiel",
+    "prix_chf": "79",
+    "statut": "À jour",
+    "vercel_project_id": "",
+    "pages": ["Accueil", "Services", "Contact"]
+  }
+]
