@@ -21,12 +21,27 @@ export default async function handler(req, res) {
   });
 
   try {
+    const countUrl = `https://api.vercel.com/v1/web/analytics/pageviews/count?${base}`;
+    const timelineUrl = `https://api.vercel.com/v1/web/analytics/pageviews/aggregate?${new URLSearchParams({ ...Object.fromEntries(base), by: 'day' })}`;
+
     const [countRes, timelineRes] = await Promise.all([
-      fetch(`https://api.vercel.com/v1/web/analytics/pageviews/count?${base}`, { headers }),
-      fetch(`https://api.vercel.com/v1/web/analytics/pageviews/aggregate?${new URLSearchParams({ ...Object.fromEntries(base), by: 'day' })}`, { headers })
+      fetch(countUrl, { headers }),
+      fetch(timelineUrl, { headers })
     ]);
 
-    const [countRaw, timelineRaw] = await Promise.all([countRes.json(), timelineRes.json()]);
+    const countText = await countRes.text();
+    const timelineText = await timelineRes.text();
+
+    let countRaw, timelineRaw;
+    try { countRaw = JSON.parse(countText); } catch { countRaw = { _parseError: countText }; }
+    try { timelineRaw = JSON.parse(timelineText); } catch { timelineRaw = { _parseError: timelineText }; }
+
+    if (!countRes.ok) {
+      return res.status(200).json({
+        error: `Vercel count API ${countRes.status}`,
+        _debug: { countRaw, timelineRaw, countUrl, base: base.toString() }
+      });
+    }
 
     // Normalize count — handle multiple possible response shapes
     const total = countRaw?.data?.pageviews
@@ -44,7 +59,7 @@ export default async function handler(req, res) {
     })) : [];
 
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-    return res.json({ total, timeline, _raw: { count: countRaw, timeline: timelineRaw } });
+    return res.json({ total, timeline, _debug: { countRaw, timelineRaw } });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
