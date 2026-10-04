@@ -1,21 +1,28 @@
 import * as XLSX from 'xlsx';
 
-function oneDriveDirectUrl(shareUrl) {
-  const encoded = Buffer.from(shareUrl).toString('base64')
-    .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  return `https://api.onedrive.com/v1.0/shares/u!${encoded}/root/content`;
-}
-
 async function fetchSheet(shareUrl, sheetName) {
-  const directUrl = oneDriveDirectUrl(shareUrl);
-  const res = await fetch(directUrl, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; AtelierWebBot/1.0)',
-      'Accept': 'application/octet-stream,*/*'
-    },
-    redirect: 'follow'
-  });
+  // Résoudre le lien court 1drv.ms via HEAD, puis télécharger
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/octet-stream,*/*'
+  };
+
+  // Construire l'URL de téléchargement direct depuis le lien de partage
+  // Pour OneDrive consumer: encoder en base64url et appeler l'API shares
+  const encoded = Buffer.from(shareUrl).toString('base64url');
+  const apiUrl = `https://api.onedrive.com/v1.0/shares/u!${encoded}/root/content`;
+
+  let res = await fetch(apiUrl, { headers, redirect: 'follow' });
+
+  // Si ça échoue, essayer de fetch le lien court directement
+  if (!res.ok) {
+    res = await fetch(shareUrl, { headers, redirect: 'follow' });
+  }
+
   if (!res.ok) throw new Error(`Erreur téléchargement (${res.status})`);
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('text/html')) throw new Error('Réponse HTML inattendue — vérifiez les permissions du partage');
+
   const buffer = await res.arrayBuffer();
   const wb = XLSX.read(buffer, { type: 'array' });
   const sheet = wb.Sheets[sheetName] || wb.Sheets[wb.SheetNames[0]];

@@ -1,9 +1,17 @@
 import * as XLSX from 'xlsx';
 
-function oneDriveDirectUrl(shareUrl) {
-  const encoded = Buffer.from(shareUrl).toString('base64')
-    .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  return `https://api.onedrive.com/v1.0/shares/u!${encoded}/root/content`;
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept': 'application/octet-stream,*/*'
+};
+
+async function fetchOneDrive(shareUrl) {
+  const encoded = Buffer.from(shareUrl).toString('base64url');
+  const apiUrl = `https://api.onedrive.com/v1.0/shares/u!${encoded}/root/content`;
+  let response = await fetch(apiUrl, { headers: BROWSER_HEADERS, redirect: 'follow' });
+  if (!response.ok) response = await fetch(shareUrl, { headers: BROWSER_HEADERS, redirect: 'follow' });
+  if (!response.ok) throw new Error(`Erreur téléchargement (${response.status})`);
+  return response;
 }
 
 export default async function handler(req, res) {
@@ -15,14 +23,7 @@ export default async function handler(req, res) {
   if (!XLSX_URL) return res.status(500).json({ error: 'Portfolio non configuré' });
 
   try {
-    const directUrl = oneDriveDirectUrl(XLSX_URL);
-    const response = await fetch(directUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AtelierWebBot/1.0)',
-        'Accept': 'application/octet-stream,*/*'
-      },
-      redirect: 'follow'
-    });
+    const response = await fetchOneDrive(XLSX_URL);
     if (!response.ok) throw new Error(`Erreur téléchargement (${response.status})`);
 
     const buffer = await response.arrayBuffer();
