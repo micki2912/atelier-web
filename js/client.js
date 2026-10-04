@@ -202,15 +202,6 @@ async function loadAnalytics() {
         <h2 class="card-title">Visites par jour</h2>
         <div class="chart-container"><canvas id="analytics-chart"></canvas></div>
       </div>
-      ${pages.length > 0 ? `<div class="card">
-        <h2 class="card-title">Pages les plus visitées</h2>
-        ${pages.map(p => `
-          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem">
-            <div style="flex:1;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.key || '/'}</div>
-            <div style="font-weight:500;color:var(--blue)">${p.count}</div>
-          </div>
-        `).join('')}
-      </div>` : ''}
     `;
 
     if (labels.length > 0) {
