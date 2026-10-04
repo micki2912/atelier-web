@@ -24,6 +24,10 @@ export default async function handler(req, res) {
   const client = clients.find(c => c.code && c.code.toLowerCase() === code.toLowerCase());
   if (!client) return res.status(401).json({ error: 'Code invalide' });
 
+  if (action === 'ping') {
+    return res.json({ v: 2, cwd: process.cwd(), clients: clients.length });
+  }
+
   if (action === 'login') {
     const { code: _code, ...safeClient } = client;
     return res.json(safeClient);
