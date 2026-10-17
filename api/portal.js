@@ -58,7 +58,8 @@ export default async function handler(req, res) {
       statut: prop(page, 'Statut'),
       sites: prop(page, 'Sites').split(',').map(s => s.trim()).filter(Boolean),
       pages: prop(page, 'Pages').split(',').map(s => s.trim()).filter(Boolean),
-      vercel_project_id: prop(page, 'Vercel Project ID')
+      vercel_project_id: prop(page, 'Vercel Project ID'),
+      ga4_property_id: prop(page, 'GA4 Property ID')
     };
 
     if (action === 'ping') return res.json({ v: 3, source: 'notion', nom: client.nom });

@@ -169,17 +169,17 @@ async function loadFactures() {
 async function loadAnalytics() {
   _analyticsLoaded = true;
   const el = document.getElementById('visiteurs-content');
-  const projectId = _clientData && _clientData.vercel_project_id;
+  const propertyId = _clientData && _clientData.ga4_property_id;
 
-  if (!projectId) {
+  if (!propertyId) {
     el.innerHTML = `<div class="analytics-unavailable">
-      <p>Aucun projet Vercel configuré pour ce client.</p>
+      <p>Aucun Property ID Google Analytics configuré pour ce client.</p>
     </div>`;
     return;
   }
 
   try {
-    const res = await fetch(`/api/analytics?projectId=${encodeURIComponent(projectId)}`);
+    const res = await fetch(`/api/analytics?propertyId=${encodeURIComponent(propertyId)}`);
     const data = await res.json();
 
     if (data.error) throw new Error(data.error);
