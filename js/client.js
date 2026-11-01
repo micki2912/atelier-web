@@ -185,6 +185,7 @@ async function loadAnalytics() {
     if (data.error) throw new Error(data.error);
 
     const total = data.total ?? '—';
+    const totalUsers = data.totalUsers ?? '—';
     const timeline = data.timeline || [];
 
     const labels = timeline.map(d => {
@@ -192,16 +193,21 @@ async function loadAnalytics() {
       return date.toLocaleDateString('fr-CH', { day: '2-digit', month: '2-digit' });
     });
     const values = timeline.map(d => d.count || 0);
+    const userValues = timeline.map(d => d.users || 0);
 
     el.innerHTML = `
       <div class="analytics-grid">
         <div class="stat-card">
-          <div class="stat-num-big">${total.toLocaleString('fr-CH')}</div>
+          <div class="stat-num-big">${typeof totalUsers === 'number' ? totalUsers.toLocaleString('fr-CH') : totalUsers}</div>
+          <div class="stat-label">Visiteurs uniques (30j)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num-big">${typeof total === 'number' ? total.toLocaleString('fr-CH') : total}</div>
           <div class="stat-label">Pages vues (30j)</div>
         </div>
       </div>
       <div class="card">
-        <h2 class="card-title">Visites par jour</h2>
+        <h2 class="card-title">Visiteurs par jour</h2>
         <div class="chart-container"><canvas id="analytics-chart"></canvas></div>
       </div>
     `;
@@ -213,7 +219,7 @@ async function loadAnalytics() {
         data: {
           labels,
           datasets: [{
-            data: values,
+            data: userValues,
             backgroundColor: 'rgba(26,63,111,.15)',
             borderColor: '#1A3F6F',
             borderWidth: 1.5,

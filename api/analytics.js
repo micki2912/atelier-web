@@ -48,7 +48,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         dateRanges: [{ startDate: '29daysAgo', endDate: 'today' }],
         dimensions: [{ name: 'date' }],
-        metrics: [{ name: 'screenPageViews' }],
+        metrics: [{ name: 'screenPageViews' }, { name: 'activeUsers' }],
         orderBys: [{ dimension: { dimensionName: 'date' }, desc: false }]
       })
     });
@@ -59,12 +59,14 @@ export default async function handler(req, res) {
     const rows = report.rows || [];
     const timeline = rows.map(r => ({
       date: `${r.dimensionValues[0].value.slice(0,4)}-${r.dimensionValues[0].value.slice(4,6)}-${r.dimensionValues[0].value.slice(6,8)}`,
-      count: parseInt(r.metricValues[0].value, 10)
+      count: parseInt(r.metricValues[0].value, 10),
+      users: parseInt(r.metricValues[1].value, 10)
     }));
     const total = timeline.reduce((s, d) => s + d.count, 0);
+    const totalUsers = timeline.reduce((s, d) => s + d.users, 0);
 
     res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
-    return res.json({ total, timeline });
+    return res.json({ total, totalUsers, timeline });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
