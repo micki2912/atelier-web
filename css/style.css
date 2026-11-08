@@ -59,6 +59,7 @@ nav {
   border-radius: 6px;
   font-weight: 500 !important;
   transition: background .2s !important;
+  white-space: nowrap;
 }
 .nav-cta:hover { background: #0F2D55 !important; }
 
@@ -697,7 +698,7 @@ footer {
 }
 
 /* ── RESPONSIVE MOBILE ── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
   /* Navigation */
   .nav-hamburger { display: flex; }
